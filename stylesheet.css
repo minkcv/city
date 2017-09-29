@@ -1,0 +1,51 @@
+* {
+    margin: 0;
+    background-color: #000000;
+    color: #0C0;
+    font-family: monospace;
+}
+.pane {
+    border: 1px;
+    border-color: #0C0;
+    border-style: solid;
+    box-sizing: border-box;
+}
+#container {
+    margin: 0;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+}
+#right {
+    float: right;
+    width: 50%;
+    height: 100%;
+}
+#threeapp {
+    height: 50%;
+}
+#other {
+    height: 50%;
+}
+#console {
+    float: left;
+    width: 50%;
+    height: 100%;
+}
+#stdout {
+    list-style-type: none;
+    padding: 0;
+}
+#stdin-span {
+    width: 49.5%;
+    display: inline-block;
+    margin: 0;
+    position: absolute;
+    bottom: 0;
+}
+#stdin {
+    width: 99%;
+    border-style: none;
+    outline: none;
+}
