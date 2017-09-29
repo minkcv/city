@@ -1,6 +1,6 @@
 var threediv = document.getElementById('threeapp');
 var width = threediv.clientWidth - 1;
-var height = threediv.clientHeight - 1;
+var height = threediv.clientHeight - 20;
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 10000);
