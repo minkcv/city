@@ -45,14 +45,14 @@ function navCmd(args) {
 function printHelp(args) {
     if (args.length < 1 || args[0] == 'help') {
         print('Available Commands:')
-        print('  help - show this help');
-        print('  help [command] - get help on a specific command');
-        print('  nav - navigate sectors');
-        print('  sys - manage CityOS system');
-        print('  e - control electrical systems');
-        print('  p - control plumbing systems');
-        print('  v - control 3D view module');
-        print('  s - control sound module');
+        print('  help - Show this help');
+        print('  help [command] - Get help on a specific command');
+        print('  nav - Navigate Sectors');
+        print('  sys - Manage CityOS System');
+        print('  e - Control Electrical Systems');
+        print('  p - Control Plumbing Systems');
+        print('  v - Control 3D View Module');
+        print('  s - Control Sound Module');
     }
     else if (args[0] == 'nav') {
         print('nav - options:');
@@ -61,19 +61,22 @@ function printHelp(args) {
         print('  go [sector name] - set the current sector by name');
     }
     else if (args[0] == 'sys') {
-
+        print('sys - options:');
+        print('  users - list system users');
+        print('  whoami - list current user');
+        print('  logout - end the current session');
     }
     else if (args[0] == 'e') {
-        
+        print('e - options:');
     }
     else if (args[0] == 'p') {
-
+        print('p - options:');
     }
     else if (args[0] == 'v') {
-        
+        print('v - options:');
     }
     else if (args[0] == 's') {
-        
+        print('s - options:');
     }
     else {
         print('No help entry for "' + args[0] + '"');
