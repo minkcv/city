@@ -1,6 +1,7 @@
 var threediv = document.getElementById('threeapp');
 var width = threediv.clientWidth - 1;
 var height = threediv.clientHeight - 20;
+var origin = new THREE.Vector3();
 
 var scene = new THREE.Scene();
 var scale = 3;
@@ -38,12 +39,19 @@ function generateBuilding(x, z, wi, de, he) {
 }
 
 var buildings = [];
-for (var i = -100; i < 100; i += 22) {
-    for (var j = -100; j < 100; j += 22) {
+for (var i = -150; i < 150; i += 22) {
+    for (var j = -150; j < 150; j += 22) {
+        if (Math.abs(i + j) > 200 ||
+           (Math.abs(i - j) > 200))
+            continue; // Make it circular
+
         var r = Math.random() * 8 + 10;
-        var h = Math.random() * 30 + 10;
         var x = Math.random() * 5 + i;
         var z = Math.random() * 5 + j;
+        var xz = new THREE.Vector3(x, 0, z);
+        var h = Math.abs(Math.random() * 50 + 40 - xz.distanceTo(origin) / 2);
+        if (h < 5)
+            h = 5;
         buildings.push(generateBuilding(x, z, r, r, h));
     }
 }
