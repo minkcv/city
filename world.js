@@ -1,6 +1,7 @@
 var origin = new THREE.Vector3();
 var currentsector = null;
 var currentbuilding = null;
+var currentstreet = null;
 
 function createWorld(divName) {
     var threediv = document.getElementById(divName);
@@ -44,8 +45,10 @@ function changeSector(sector) {
         return;
     clearScene(cityWorld.scene);
     var buildings = sector.bldg;
-    buildings.forEach(function(b){b.rotation.y = 0;});
-    buildings.forEach(function(b){cityWorld.scene.add(b)});
+    buildings.forEach(function(b){ if (b != null) b.rotation.y = 0;});
+    buildings.forEach(function(b){ if (b != null) cityWorld.scene.add(b)});
+    var streets = sector.tran;
+    streets.forEach(function(s){cityWorld.scene.add(s)});
     currentsector = sector;
     if (!cityWorld.animating) {
         cityWorld.animating = true;
@@ -53,18 +56,24 @@ function changeSector(sector) {
     }
 }
 
-function changeBuilding(building) {
+function changeBuilding(building, road) {
     clearScene(buildingWorld.scene);
     currentbuilding = building;
+    currentstreet = road;
     if (building == null)
         return;
     building.position.x = 0;
     building.position.y = 0;
     building.position.z = 0;
     building.rotation.y = 0;
+    road.position.x = 0;
+    road.position.y = 0;
+    road.position.z = 0;
+    road.rotation.y = 0;
     buildingWorld.camera.zoom = 2;
     buildingWorld.camera.updateProjectionMatrix();
     buildingWorld.scene.add(building);
+    buildingWorld.scene.add(road);
     if (!buildingWorld.animating) {
         buildingWorld.animating = true;
         animate(buildingWorld);
@@ -87,10 +96,14 @@ function animate(world, cityMode) {
     else {
         if (currentbuilding != null) {
             requestAnimationFrame(function(){animate(world, cityMode)});
-            if (world.camera.rotation.x != Math.PI / 2) // Only spin buildings in iso view
+            if (world.camera.rotation.x != Math.PI / 2) { // Only spin buildings in iso view
                 currentbuilding.rotation.y += 0.01;
-            else
+                currentstreet.rotation.y += 0.01;
+            }
+            else {
                 currentbuilding.rotation.y = 0;
+                currentstreet.rotation.y = 0;
+            }
         }
     }
     world.renderer.render(world.scene, world.camera);

@@ -2,34 +2,30 @@ var b1 = generateBuildings();
 var b2 = generateBuildings();
 var b3 = generateBuildings();
 var b4 = generateBuildings();
+var t1 = generateTransit();
+var t2 = generateTransit();
+var t3 = generateTransit();
+var t4 = generateTransit();
 var sectors = [
     {   name: "alpha",
         desc: "",
         bldg: b1,
-        mech: [],
-        elec: [],
-        plmb: []
+        tran: t1
     },
     {   name: "bravo",
         desc: "",
         bldg: b2,
-        mech: [],
-        elec: [],
-        plmb: []
+        tran: t2
     },
     {   name: "charlie",
         desc: "",
         bldg: b3,
-        mech: [],
-        elec: [],
-        plmb: []
+        tran: t3
     },
     {   name: "delta",
         desc: "",
         bldg: b4,
-        mech: [],
-        elec: [],
-        plmb: []
+        tran: t4
     }
 ];
 

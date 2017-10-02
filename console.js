@@ -97,7 +97,10 @@ function navCmd(args) {
                     if (j < 100)
                         msg += ' ';
                     if (j < currentsector.bldg.length)
-                        msg += j + ': ' + currentsector.bldg[j].name;
+                        if (currentsector.bldg[j] != null)
+                            msg += j + ': ' + currentsector.bldg[j].name;
+                        else
+                            msg += j + ': Vacant';
                     for (var w = msg.length; w < 40; w++)
                         msg += ' ';
                 }
@@ -108,8 +111,10 @@ function navCmd(args) {
             var i = parseInt(args[2]);
             if (isNaN(i) || i >= currentsector.bldg.length)
                 print('"' + args[2] + '" is not a known building in sector "' + currentsector.name + '"');
+            else if (currentsector.bldg[i] == null)
+                print('"' + args[2] + '" is a vacant lot');
             else {
-                changeBuilding(currentsector.bldg[i].clone());
+                changeBuilding(currentsector.bldg[i].clone(), currentsector.tran[i].clone());
                 print('Selected building is now "' + i + ': ' + currentbuilding.name + '" in sector "' + currentsector.name + '"');
             }
         }

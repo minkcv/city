@@ -1,4 +1,5 @@
 var material = new THREE.LineBasicMaterial({color: 0x00ff00});
+var blocksize = 22;
 
 function rand(max) {
     return Math.floor(Math.random() * max);
@@ -9,31 +10,34 @@ function generateName(height) {
         'IBN', 'AA&T', 'Syco', 'Orange', 'Costlo', 'Bells', 'Concast', 'Bepis', 'IMD', 'DedFx'
     ];
     var bigtypes = [
-        'Mall', 'Credit Union', 'Inc', 'Corp', 'Group', 'Motors', 'Health', 'Alliance', 'Technologies', 'Insurance', 'Mutual', 'Financial'
+        'Mall', 'Credit Union', 'Inc', 'Corp', 'Group', 'Motors', 'Health', 'Alliance', 'Technologies',
+        'Insurance', 'Mutual', 'Financial', 'Telecom', 'Tower'
     ];
     var mediumnames = [
-        'North', 'East', 'South', 'West', 'Martin Luther King', 'George Washington', 'Abraham Lincoln'
+        'North', 'East', 'South', 'West', 'Adams', 'Washington', 'Lincoln',
+        'Central'
     ];
     var mediumtypes = [
-        'High School', 'Library'
+        'High School', 'Library', 'Post Office', 'Middle School', 'Community College',
+        'Prison', 'Water Treatment Plant', 'State Office'
     ];
     var smallnames = [
-        'Mark\'s', 'Neighborhood', 
+        'Mark\'s', 'Neighborhood', 'Annie\'s', 'Green', 'USA'
     ];
     var smalltypes = [
-        'Department Store', 'Dental', 'Deli', 'Video Rental', 'Coffee Shop'
+        'Department Store', 'Dental', 'Deli', 'Video Rental', 'Coffee Shop', 'Cafe', 'Grocery', 'Skate Shop', 'Games'
     ];
     var name = '';
     if (height > 50) {
-        name += '' + bignames[rand(bignames.length)];
+        name += bignames[rand(bignames.length)];
         name += ' ' + bigtypes[rand(bigtypes.length)];
     }
     else if (height > 25) {
-        name += '' + mediumnames[rand(mediumnames.length)];
+        name += mediumnames[rand(mediumnames.length)];
         name += ' ' + mediumtypes[rand(mediumtypes.length)];
     }
     else {
-        name += '' + smallnames[rand(smallnames.length)];
+        name += smallnames[rand(smallnames.length)];
         name += ' ' + smalltypes[rand(smalltypes.length)];
     }
     return name;
@@ -67,14 +71,17 @@ function generateBuilding(x, z, wi, de, he) {
 
 function generateBuildings() {
     var buildings = [];
-    for (var i = -150; i < 150; i += 22) {
-        for (var j = -150; j < 150; j += 22) {
+    for (var i = -150; i < 150; i += blocksize) {
+        for (var j = -150; j < 150; j += blocksize) {
             if (Math.abs(i + j) > 200 ||
                (Math.abs(i - j) > 200))
                 continue; // Make it circular
 
             if (Math.random() * 50 < 4) // Leave some gaps
+            {
+                buildings.push(null);
                 continue;
+            }
 
             var r = Math.random() * 8 + 10;
             var x = Math.random() * 5 + i;
