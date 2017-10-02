@@ -1,5 +1,3 @@
-var currentsector = sectors[0];
-
 var stdout = document.getElementById('stdout');
 var stdin = document.getElementById('stdin');
 var consolepane = document.getElementById('console');
@@ -36,6 +34,8 @@ function parseCommand(cmd) {
         navCmd(tokens);
     else if (tokens[0] === 'sys')
         sysCmd(tokens);
+    else if (tokens[0] === 'v')
+        viewCmd(tokens);
     else
         printUnknownCmd(tokens[0]);
 
@@ -43,11 +43,13 @@ function parseCommand(cmd) {
 }
 
 function navCmd(args) {
-    if (args.length < 2) {
+    if (args.length < 2)
+        printHelp(['help', 'nav']);
+    else if (args[1] === 'list') {
         print('Sectors:');
         for (var i = 0; i < sectors.length; i++) {
             var name = sectors[i].name
-            if (name === currentsector.name)
+            if (currentsector && name === currentsector.name)
                 print(' *' + name);
             else
                 print('  ' + name);
@@ -61,7 +63,7 @@ function navCmd(args) {
             if (newsector == null)
                 print('"' + args[2] + '" is not a valid sector');
             else {
-                currentsector = newsector;
+                changeSector(newsector);
                 print('Changed to sector "' + currentsector.name + '"');
             }
         }
@@ -85,23 +87,37 @@ function navCmd(args) {
 function sysCmd(args) {
     if (args.length < 2)
         printHelp(['help', 'sys']);
-    else if (args[1] == 'users') {
+    else if (args[1] === 'users') {
         print('tim');
         print('robert');
         print('charles');
         print('leonard');
     }
-    else if (args[1] == 'whoami')
+    else if (args[1] === 'whoami')
         print('guest');
-    else if (args[1] == 'clear')
+    else if (args[1] === 'clear')
     {
         stdout.innerHTML = '';
         printWelcome();
     }
 }
 
+function viewCmd(args) {
+    if (args.length < 2)
+        printHelp(['help', 'v']);
+    else if (args[1] === 'on') {
+        document.getElementById('viewstatus').innerHTML = 'Online';
+        stopanimating = false;
+        changeSector(currentsector);
+    }
+    else if (args[1] === 'off') {
+        document.getElementById('viewstatus').innerHTML = 'Offline';
+        stopanimating = true;
+    }
+}
+
 function printHelp(args) {
-    if (args.length < 2 || args[1] == 'help') {
+    if (args.length < 2 || args[1] === 'help') {
         print('Available Commands:')
         print('  help - Show this help');
         print('  help [command] - Get help on a specific command');
@@ -116,7 +132,7 @@ function printHelp(args) {
     }
     else if (args[1] == 'nav') {
         print('nav - options:');
-        print('  <empty> - List available sectors');
+        print('  list - List available sectors');
         print('  go [sector name] - Navigate to a different sector');
         print('  info [sector name] - Print sector info (name optional)');
     }
