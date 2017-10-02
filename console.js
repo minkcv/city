@@ -1,3 +1,5 @@
+var cityWorld = createWorld('three-city');
+var buildingWorld = createWorld('three-building');
 var stdout = document.getElementById('stdout');
 var stdin = document.getElementById('stdin');
 var consolepane = document.getElementById('console');
@@ -36,8 +38,6 @@ function parseCommand(cmd) {
         sysCmd(tokens);
     else if (tokens[0] === 'v')
         viewCmd(tokens);
-    else if (tokens[0] === 's')
-        soundCmd(tokens);
     else
         printUnknownCmd(tokens[0]);
 
@@ -66,6 +66,7 @@ function navCmd(args) {
                 print('"' + args[2] + '" is not a valid sector');
             else {
                 changeSector(newsector);
+                changeBuilding(null);
                 print('Changed to sector "' + currentsector.name + '"');
             }
         }
@@ -77,7 +78,7 @@ function navCmd(args) {
 
         print('Sector "' + infosector.name + '" information:');
         print(' ' + infosector.desc);
-        print(' ' + infosector.bldg);
+        print('  Number of buildings: ' + infosector.bldg.length);
         print(' ' + infosector.mech);
         print(' ' + infosector.elec);
         print(' ' + infosector.plmb);
@@ -102,7 +103,7 @@ function navCmd(args) {
             if (isNaN(i) || i >= currentsector.bldg.length)
                 print('"' + args[2] + '" is not a known building in sector "' + currentsector.name + '"');
             else {
-                currentbuilding = currentsector.bldg[i];
+                changeBuilding(currentsector.bldg[i].clone());
                 print('Selected building is now "' + i + ': ' + currentbuilding.name + '" in sector "' + currentsector.name + '"');
             }
         }
@@ -130,41 +131,35 @@ function sysCmd(args) {
 }
 
 function viewCmd(args) {
-    if (args.length < 2)
+    if (args.length < 3)
         printHelp(['help', 'v']);
-    else if (args[1] === 'on') {
-        document.getElementById('viewstatus').innerHTML = 'Online';
-        stopanimating = false;
-        changeSector(currentsector);
-    }
-    else if (args[1] === 'off') {
-        document.getElementById('viewstatus').innerHTML = 'Offline';
-        stopanimating = true;
-    }
-    else if (args[1] === 'in') {
-        camera.zoom += 0.25;
-        camera.updateProjectionMatrix();
-    }
-    else if (args[1] === 'out') {
-        camera.zoom -= 0.25;
-        camera.updateProjectionMatrix();
-    }
-    else if (args[1] === 'top') {
-        topView();
-    }
-    else if (args[1] === 'iso') {
-        isoView();
-    }
-}
+    else {
+        var camera = null;
+        if (args[1] === 'b')
+            camera = buildingWorld.camera;
+        else if (args[1] === 's')
+            camera = cityWorld.camera;
+        else {
+            printHelp(['help', 'v']);
+            return;
+        }
 
-function soundCmd(args) {
-    if (args.length < 2)
-        printHelp(['help', 's']);
-    else if (args[1] === 'on') {
-        document.getElementById('soundstatus').innerHTML = 'Online';
-    }
-    else if (args[1] === 'off') {
-        document.getElementById('soundstatus').innerHTML = 'Offline';
+        if (args[2] === 'in') {
+            camera.zoom += 0.25;
+            camera.updateProjectionMatrix();
+        }
+        else if (args[2] === 'out') {
+            camera.zoom -= 0.25;
+            camera.updateProjectionMatrix();
+        }
+        else if (args[2] === 'top') {
+            topView(camera);
+        }
+        else if (args[2] === 'iso') {
+            isoView(camera);
+        }
+        else 
+            printUnknownOption('v', args[2]);
     }
 }
 
@@ -179,14 +174,14 @@ function printHelp(args) {
         print('  e - Control Electrical Systems');
         print('  p - Control Plumbing Systems');
         print('  t - Control Transit Systems');
-        print('  v - Control 3D View Module');
-        print('  s - Control Sound Module');
+        print('  v - Control 3D Views');
     }
     else if (args[1] == 'nav') {
         print('nav - options:');
         print('  list - List available sectors');
         print('  s [sector name] - Navigate to a different sector');
         print('  info [sector name] - Print sector info (name optional)');
+        print('  b - List buildings in the current sector');
         print('  b [building id] - Select a building in the current sector');
     }
     else if (args[1] == 'sys') {
@@ -206,17 +201,13 @@ function printHelp(args) {
     }
     else if (args[1] == 'v') {
         print('v - options:');
-        print('  on - Enable 3D view module');
-        print('  off - Disable 3D view module');
+        print('  s [modifier] - Do modifier on sector view');
+        print('  b [modifier] - Do modifier on building view');
+        print(' modifiers:');
         print('  in - Zoom in');
         print('  out - Zoom out');
         print('  top - Top view');
         print('  iso - 3D view');
-    }
-    else if (args[1] == 's') {
-        print('s - options:');
-        print('  on - Enable sound module');
-        print('  off - Disable sound module');
     }
     else {
         print('No help entry for "' + args[1] + '"');
