@@ -61,6 +61,16 @@ function generateBuilding(x, z, wi, de, he) {
         p1, p2, p3, p4,
         addv(p1, h), addv(p2, h), addv(p3, h), addv(p4, h)
     ];
+    if (Math.random() > 0.8) { // Caps on some buildings
+        var up = Math.floor(Math.random() * 5);
+        var xin = Math.floor(Math.random() * 3);
+        var zin = Math.floor(Math.random() * 3);
+        var p5 = new THREE.Vector3(-wi + xin, he + up, -de + zin);
+        var p6 = new THREE.Vector3(-wi + xin, he + up, de - zin);
+        var p7 = new THREE.Vector3(wi - xin, he + up, -de + zin);
+        var p8 = new THREE.Vector3(wi - xin, he + up, de - zin);
+        points.push(p5); points.push(p6); points.push(p7); points.push(p8);
+    }
     var convexgeom = new THREE.ConvexGeometry(points);
     var obj = new THREE.LineSegments(new THREE.EdgesGeometry(convexgeom), material);
     obj.position.x = x;

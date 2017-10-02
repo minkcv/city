@@ -1,6 +1,7 @@
 function generateTransit() {
     var roads = [];
     var hs = blocksize / 2; // Half size
+    var lightHeight = 5;
     for (var i = -150; i < 150; i += blocksize) {
         for (var j = -150; j < 150; j += blocksize) {
             if (Math.abs(i + j) > 200 ||
@@ -8,6 +9,7 @@ function generateTransit() {
                 continue; // Make it circular
 
             var points = [
+                // Box
                 new THREE.Vector3(-hs, 0, -hs),
                 new THREE.Vector3(hs, 0, -hs),
                 new THREE.Vector3(hs, 0, -hs),
@@ -16,7 +18,27 @@ function generateTransit() {
                 new THREE.Vector3(-hs, 0, hs),
                 new THREE.Vector3(-hs, 0, hs),
                 new THREE.Vector3(-hs, 0, -hs),
-            ]
+
+                // Traffic lignts
+                new THREE.Vector3(-hs, 0, -hs),
+                new THREE.Vector3(-hs, lightHeight, -hs),
+                new THREE.Vector3(-hs, lightHeight, -hs),
+                new THREE.Vector3(-hs - 3, lightHeight, -hs),
+
+                new THREE.Vector3(hs, 0, -hs),
+                new THREE.Vector3(hs, lightHeight, -hs),
+                new THREE.Vector3(hs, lightHeight, -hs),
+                new THREE.Vector3(hs, lightHeight, -hs - 3),
+                new THREE.Vector3(-hs, 0, hs),
+                new THREE.Vector3(-hs, lightHeight, hs),
+                new THREE.Vector3(-hs, lightHeight, hs),
+                new THREE.Vector3(-hs, lightHeight, hs + 3),
+                
+                new THREE.Vector3(hs, 0, hs),
+                new THREE.Vector3(hs, lightHeight, hs),
+                new THREE.Vector3(hs, lightHeight, hs),
+                new THREE.Vector3(hs + 3, lightHeight, hs)
+            ];
             var geom = new THREE.Geometry();
             points.forEach(function(p){geom.vertices.push(p)});
             var lines = new THREE.LineSegments(geom, material);
