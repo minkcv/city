@@ -75,7 +75,7 @@ function navCmd(args) {
         if (args.length > 3)
             infosector = getSector(args[2]);
 
-        print('Sector ' + infosector.name + ' information:');
+        print('Sector "' + infosector.name + '" information:');
         print(' ' + infosector.desc);
         print(' ' + infosector.bldg);
         print(' ' + infosector.mech);
@@ -87,14 +87,25 @@ function navCmd(args) {
             print('No sector selected');
         }
         else if (args.length < 3) {
-            for (var i = 0; i < currentsector.bldg.length; i++) {
-                print(' ' + i + ': ' + currentsector.bldg[i].name);
+            print('Buildings in sector "' + currentsector.name + '"');
+            for (var i = 0; i < currentsector.bldg.length; i += 5) {
+                var msg = ' ';
+                for (var j = i; j < i + 5; j++) {
+                    if (j < currentsector.bldg.length)
+                        msg += j + ': ' + currentsector.bldg[j].name + '\t';
+                }
+                print(msg);
             }
         }
-        else{
-
+        else {
+            var i = parseInt(args[2]);
+            if (isNaN(i) || i >= currentsector.bldg.length)
+                print('"' + args[2] + '" is not a known building in sector "' + currentsector.name + '"');
+            else {
+                currentbuilding = currentsector.bldg[i];
+                print('Selected building is now "' + i + ': ' + currentbuilding.name + '" in sector "' + currentsector.name + '"');
+            }
         }
-
     }
     else
         printUnknownOption(args[0], args[1]);

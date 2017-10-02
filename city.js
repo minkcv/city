@@ -4,6 +4,7 @@ var height = threediv.clientHeight - 20;
 var origin = new THREE.Vector3();
 
 var currentsector = null;
+var currentbuilding = null;
 
 var scene = new THREE.Scene();
 var scale = 3;
