@@ -89,11 +89,17 @@ function navCmd(args) {
         }
         else if (args.length < 3) {
             print('Buildings in sector "' + currentsector.name + '"');
-            for (var i = 0; i < currentsector.bldg.length; i += 5) {
+            for (var i = 0; i < currentsector.bldg.length; i += 2) {
                 var msg = ' ';
-                for (var j = i; j < i + 5; j++) {
+                for (var j = i; j < i + 2; j++) {
+                    if (j < 10)
+                        msg += ' ';
+                    if (j < 100)
+                        msg += ' ';
                     if (j < currentsector.bldg.length)
-                        msg += j + ': ' + currentsector.bldg[j].name + '\t';
+                        msg += j + ': ' + currentsector.bldg[j].name;
+                    for (var w = msg.length; w < 40; w++)
+                        msg += ' ';
                 }
                 print(msg);
             }
@@ -168,7 +174,7 @@ function printHelp(args) {
         print('Available Commands:')
         print('  help - Show this help');
         print('  help [command] - Get help on a specific command');
-        print('  nav - Navigate Sectors');
+        print('  nav - Navigate Sectors and Buildings');
         print('  sys - Manage CityOS System');
         print('  m - Control Mechanical Systems');
         print('  e - Control Electrical Systems');
