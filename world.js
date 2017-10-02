@@ -62,6 +62,8 @@ function changeBuilding(building) {
     building.position.y = 0;
     building.position.z = 0;
     building.rotation.y = 0;
+    buildingWorld.camera.zoom = 2;
+    buildingWorld.camera.updateProjectionMatrix();
     buildingWorld.scene.add(building);
     if (!buildingWorld.animating) {
         buildingWorld.animating = true;
