@@ -36,6 +36,8 @@ function parseCommand(cmd) {
         sysCmd(tokens);
     else if (tokens[0] === 'v')
         viewCmd(tokens);
+    else if (tokens[0] === 's')
+        soundCmd(tokens);
     else
         printUnknownCmd(tokens[0]);
 
@@ -55,9 +57,9 @@ function navCmd(args) {
                 print('  ' + name);
         }
     }
-    else if (args[1] === 'go') {
+    else if (args[1] === 's') {
         if (args.length < 3)
-            print('Must specify sector for option "go"');
+            print('Must specify sector for option "s"');
         else {
             var newsector = getSector(args[2]);
             if (newsector == null)
@@ -79,6 +81,20 @@ function navCmd(args) {
         print(' ' + infosector.mech);
         print(' ' + infosector.elec);
         print(' ' + infosector.plmb);
+    }
+    else if (args[1] === 'b') {
+        if (currentsector == null) {
+            print('No sector selected');
+        }
+        else if (args.length < 3) {
+            for (var i = 0; i < currentsector.bldg.length; i++) {
+                print(' ' + i + ': ' + currentsector.bldg[i].name);
+            }
+        }
+        else{
+
+        }
+
     }
     else
         printUnknownOption(args[0], args[1]);
@@ -114,6 +130,31 @@ function viewCmd(args) {
         document.getElementById('viewstatus').innerHTML = 'Offline';
         stopanimating = true;
     }
+    else if (args[1] === 'in') {
+        camera.zoom += 0.25;
+        camera.updateProjectionMatrix();
+    }
+    else if (args[1] === 'out') {
+        camera.zoom -= 0.25;
+        camera.updateProjectionMatrix();
+    }
+    else if (args[1] === 'top') {
+        topView();
+    }
+    else if (args[1] === 'iso') {
+        isoView();
+    }
+}
+
+function soundCmd(args) {
+    if (args.length < 2)
+        printHelp(['help', 's']);
+    else if (args[1] === 'on') {
+        document.getElementById('soundstatus').innerHTML = 'Online';
+    }
+    else if (args[1] === 'off') {
+        document.getElementById('soundstatus').innerHTML = 'Offline';
+    }
 }
 
 function printHelp(args) {
@@ -133,8 +174,9 @@ function printHelp(args) {
     else if (args[1] == 'nav') {
         print('nav - options:');
         print('  list - List available sectors');
-        print('  go [sector name] - Navigate to a different sector');
+        print('  s [sector name] - Navigate to a different sector');
         print('  info [sector name] - Print sector info (name optional)');
+        print('  b [building id] - Select a building in the current sector');
     }
     else if (args[1] == 'sys') {
         print('sys - options:');
@@ -153,9 +195,17 @@ function printHelp(args) {
     }
     else if (args[1] == 'v') {
         print('v - options:');
+        print('  on - Enable 3D view module');
+        print('  off - Disable 3D view module');
+        print('  in - Zoom in');
+        print('  out - Zoom out');
+        print('  top - Top view');
+        print('  iso - 3D view');
     }
     else if (args[1] == 's') {
         print('s - options:');
+        print('  on - Enable sound module');
+        print('  off - Disable sound module');
     }
     else {
         print('No help entry for "' + args[1] + '"');

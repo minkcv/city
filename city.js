@@ -8,11 +8,23 @@ var currentsector = null;
 var scene = new THREE.Scene();
 var scale = 3;
 var camera = new THREE.OrthographicCamera(width / -scale, width / scale, height / scale, height / -scale, 0, 4000);
-//camera.rotation.x -= Math.PI / 2
-camera.rotation.x = -0.5;
-// zoom out
-camera.position.z = 200;
-camera.position.y = 130;
+isoView();
+
+function isoView() {
+    camera.rotation.x = -0.5;
+    // Move viewing volume back
+    camera.position.z = 200;
+    camera.position.y = 130;
+    camera.updateProjectionMatrix();
+}
+
+function topView() {
+    camera.rotation.x = Math.PI / 2;
+    camera.position.x = 0;
+    camera.position.y = 0;
+    camera.position.z = 0;
+    camera.updateProjectionMatrix();
+}
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(width, height);
@@ -97,7 +109,10 @@ function animate() {
     if (currentsector != null) {
         animating = true;
         requestAnimationFrame(animate);
-        currentsector.bldg.forEach(function(e){e.rotation.y += 0.01});
+        if (camera.rotation.x != Math.PI / 2) // Only spin buildings in iso view
+            currentsector.bldg.forEach(function(e){e.rotation.y += 0.01});
+        else
+            currentsector.bldg.forEach(function(e){e.rotation.y = 0});
         renderer.render(scene, camera);
     }
 }
