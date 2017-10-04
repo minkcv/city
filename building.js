@@ -1,4 +1,5 @@
 var material = new THREE.LineBasicMaterial({color: 0x00ff00});
+var yellowMaterial = new THREE.LineBasicMaterial({color: 0xffff00});
 var blocksize = 22;
 
 function rand(max) {
@@ -19,13 +20,14 @@ function generateName(height) {
     ];
     var mediumtypes = [
         'High School', 'Library', 'Post Office', 'Middle School', 'Community College',
-        'Prison', 'Water Treatment Plant', 'State Office'
+        'Prison', 'Water Treatment Plant', 'State Office', 'Bus Station'
     ];
     var smallnames = [
-        'Mark\'s', 'Neighborhood', 'Annie\'s', 'Green', 'USA'
+        'Mark\'s', 'Neighborhood', 'Annie\'s', 'Green', 'USA', 'TJ\'s', 
     ];
     var smalltypes = [
-        'Department Store', 'Dental', 'Deli', 'Video Rental', 'Coffee Shop', 'Cafe', 'Grocery', 'Skate Shop', 'Games'
+        'Department Store', 'Dental', 'Deli', 'Video Rental', 'Coffee Shop', 'Cafe', 'Grocery',
+        'Skate Shop', 'Games', 'Diner', 'Ice Cream'
     ];
     var name = '';
     if (height > 50) {
@@ -72,11 +74,47 @@ function generateBuilding(x, z, wi, de, he) {
         points.push(p5); points.push(p6); points.push(p7); points.push(p8);
     }
     var convexgeom = new THREE.ConvexGeometry(points);
-    var obj = new THREE.LineSegments(new THREE.EdgesGeometry(convexgeom), material);
-    obj.position.x = x;
-    obj.position.z = z;
-    obj.name = generateName(he);
-    return obj;
+    var buildingModel = new THREE.LineSegments(new THREE.EdgesGeometry(convexgeom), material);
+    buildingModel.position.x = x;
+    buildingModel.position.z = z;
+    buildingModel.name = generateName(he);
+    buildingModel.elec = generateElectrical(x, z, wi, de, he);
+    return buildingModel;
+}
+
+function generateElectrical(x, z, wi, de, he) {
+    var geom = new THREE.Geometry();
+    var margin = 2;
+    var margin2 = 4;
+    var level = 10;
+    for (var i = 0; i < he; i += level) {
+        var points = [
+            new THREE.Vector3(-wi + margin, i, -de + margin),
+            new THREE.Vector3(-wi + margin, i, de - margin),
+
+            new THREE.Vector3(-wi + margin, i, de - margin),
+            new THREE.Vector3(wi - margin, i, de - margin),
+
+            new THREE.Vector3(wi - margin, i, de - margin),
+            new THREE.Vector3(wi - margin, i, -de + margin),
+
+            new THREE.Vector3(-wi + margin, i, 0),
+            new THREE.Vector3(wi - margin, i, 0),
+
+            new THREE.Vector3(wi - margin, i, -de + margin),
+            new THREE.Vector3(-wi + margin, i, -de + margin)
+        ];
+        if (i + level < he) {
+            points.push(new THREE.Vector3(-wi + margin, i, 0));
+            points.push(new THREE.Vector3(-wi + margin, i + level, 0));
+        }
+
+        points.forEach(function(p){geom.vertices.push(p)});
+    }
+    var lines = new THREE.LineSegments(geom, yellowMaterial);
+    lines.position.x = x;
+    lines.position.z = z;
+    return lines;
 }
 
 function generateBuildings() {

@@ -47,19 +47,17 @@ function parseCommand(cmd) {
 function navCmd(args) {
     if (args.length < 2)
         printHelp(['help', 'nav']);
-    else if (args[1] === 'list') {
-        print('Sectors:');
-        for (var i = 0; i < sectors.length; i++) {
-            var name = sectors[i].name
-            if (currentsector && name === currentsector.name)
-                print(' *' + name);
-            else
-                print('  ' + name);
-        }
-    }
     else if (args[1] === 's') {
-        if (args.length < 3)
-            print('Must specify sector for option "s"');
+        if (args.length < 3) {
+            print('Sectors:');
+            for (var i = 0; i < sectors.length; i++) {
+                var name = sectors[i].name
+                if (currentsector && name === currentsector.name)
+                    print(' *' + name);
+                else
+                    print('  ' + name);
+            }
+        }
         else {
             var newsector = getSector(args[2]);
             if (newsector == null)
@@ -114,7 +112,9 @@ function navCmd(args) {
             else if (currentsector.bldg[i] == null)
                 print('"' + args[2] + '" is a vacant lot');
             else {
-                changeBuilding(currentsector.bldg[i].clone(), currentsector.tran[i].clone());
+                var newBuilding = currentsector.bldg[i].clone();
+                newBuilding.cityRef = currentsector.bldg[i];
+                changeBuilding(newBuilding, currentsector.tran[i].clone(), currentsector.bldg[i].elec.clone());
                 print('Selected building is now "' + i + ': ' + currentbuilding.name + '" in sector "' + currentsector.name + '"');
             }
         }
@@ -189,7 +189,7 @@ function printHelp(args) {
     }
     else if (args[1] == 'nav') {
         print('nav - options:');
-        print('  list - List available sectors');
+        print('  s - List available sectors');
         print('  s [sector name] - Navigate to a different sector');
         print('  info [sector name] - Print sector info (name optional)');
         print('  b - List buildings in the current sector');
