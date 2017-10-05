@@ -67,8 +67,10 @@ function changeBuilding(building, road, elec) {
     currentbuilding = building;
     currentstreet = road;
     currentelectrical = elec;
-    if (building == null)
+    if (building == null) {
+        buildingWorld.animating = false;
         return;
+    }
     building.position.x = 0;
     building.position.y = 0;
     building.position.z = 0;
@@ -88,7 +90,7 @@ function changeBuilding(building, road, elec) {
     buildingWorld.scene.add(elec);
     if (!buildingWorld.animating) {
         buildingWorld.animating = true;
-        animate(buildingWorld);
+        animate(buildingWorld, false);
     }
 }
 
