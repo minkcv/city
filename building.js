@@ -86,7 +86,6 @@ function generateBuilding(x, z, wi, de, he) {
 function generateElectrical(x, z, wi, de, he) {
     var geom = new THREE.Geometry();
     var margin = 2;
-    var margin2 = 4;
     var level = 10;
     for (var i = 0; i < he; i += level) {
         var points = [
@@ -101,6 +100,9 @@ function generateElectrical(x, z, wi, de, he) {
 
             new THREE.Vector3(-wi + margin, i, 0),
             new THREE.Vector3(wi - margin, i, 0),
+
+            new THREE.Vector3(0, i, de - margin),
+            new THREE.Vector3(0, i, -de + margin),
 
             new THREE.Vector3(wi - margin, i, -de + margin),
             new THREE.Vector3(-wi + margin, i, -de + margin)
