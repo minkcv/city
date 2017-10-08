@@ -1,4 +1,5 @@
-var material = new THREE.LineBasicMaterial({color: 0x00ff00});
+var greenmaterial = new THREE.LineBasicMaterial({color: 0x00ff00});
+var redmaterial = new THREE.LineBasicMaterial({color: 0xff0000});
 var yellowMaterial = new THREE.LineBasicMaterial({color: 0xffff00});
 var blocksize = 22;
 
@@ -74,7 +75,7 @@ function generateBuilding(x, z, wi, de, he) {
         points.push(p5); points.push(p6); points.push(p7); points.push(p8);
     }
     var convexgeom = new THREE.ConvexGeometry(points);
-    var buildingModel = new THREE.LineSegments(new THREE.EdgesGeometry(convexgeom), material);
+    var buildingModel = new THREE.LineSegments(new THREE.EdgesGeometry(convexgeom), greenmaterial);
     buildingModel.position.x = x;
     buildingModel.position.z = z;
     buildingModel.name = generateName(he);

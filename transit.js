@@ -47,7 +47,7 @@ function generateTransit() {
             ];
             var geom = new THREE.Geometry();
             points.forEach(function(p){geom.vertices.push(p)});
-            var lines = new THREE.LineSegments(geom, material);
+            var lines = new THREE.LineSegments(geom, greenmaterial);
             lines.position.x = i;
             lines.position.z = j;
             lines.name = streetNumbers[(i + 150) / blocksize] + ' and ' +  streetNames[(j + 150) / blocksize];

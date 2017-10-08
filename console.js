@@ -124,7 +124,8 @@ function navCmd(args) {
                 newBuilding.cityRef = currentsector.bldg[i];
                 newBuilding.elec = currentsector.bldg[i].elec.clone();
                 newBuilding.street = currentsector.tran[i].clone();
-                changeBuilding(newBuilding, currentsector.tran[i].clone(), currentsector.bldg[i].elec.clone());
+                newBuilding.realstreet = currentsector.tran[i];
+                changeBuilding(newBuilding);
                 print('Selected building is now "' + i + ': ' + currentbuilding.name + '" in sector "' + currentsector.name + '"');
             }
         }
@@ -202,8 +203,13 @@ function transitCmd(args)
                             msg += ' ';
                         if (j < 100)
                             msg += ' ';
-                        if (j < currentsector.tran.length)
+                        if (j < currentsector.tran.length) {
                             msg += j + ': ' + currentsector.tran[j].name;
+                            if (currentsector.tran[j].material == greenmaterial)
+                                msg += ' - on';
+                            else if (currentsector.tran[j].material == redmaterial)
+                                msg += ' - off';
+                        }
                         for (var w = msg.length; w < 40; w++)
                             msg += ' ';
                     }
@@ -217,6 +223,34 @@ function transitCmd(args)
                 else {
                     currentstreet = currentsector.tran[i];
                     print('Selected street is now "' + i + ': ' + currentstreet.name + '" in sector "' + currentsector.name + '"');
+                }
+            }
+        }
+        else {
+            if (currentstreet == null)
+                print('No street selected');
+            else if (args[1] === 'on')
+            {
+                currentstreet.material = greenmaterial;
+                if (currentbuilding != null) {
+                    var newBuilding = currentbuilding.cityRef.clone();
+                    newBuilding.cityRef = currentbuilding.cityRef;
+                    newBuilding.elec = currentbuilding.elec;
+                    newBuilding.realstreet = currentbuilding.realstreet;
+                    newBuilding.street = currentbuilding.realstreet.clone();
+                    changeBuilding(newBuilding);
+                }
+            }
+            else if (args[1] === 'off')
+            {
+                currentstreet.material = redmaterial;
+                if (currentbuilding != null) {
+                    var newBuilding = currentbuilding.cityRef.clone();
+                    newBuilding.cityRef = currentbuilding.cityRef;
+                    newBuilding.elec = currentbuilding.elec;
+                    newBuilding.realstreet = currentbuilding.realstreet;
+                    newBuilding.street = currentbuilding.realstreet.clone();
+                    changeBuilding(newBuilding);
                 }
             }
         }
