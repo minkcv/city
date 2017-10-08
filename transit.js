@@ -1,14 +1,14 @@
 function generateTransit() {
     var streets = [];
-    var hs = blocksize / 2; // Half size
+    var hs = blocksize; // Half size
     var lightHeight = 6;
     var streetNumbers = [ '1st', '2nd', '3rd'];
     for (var i = 4; i < 300 / blocksize + 1; i++) {
         streetNumbers.push(i + 'th');
     }
     var streetNames = ['Albion', 'Birch', 'Chestnut', 'Delaware', 'Eleanor', 'France', 'Georgia', 'High', 'Illinois', 'Josephine', 'Kearny', 'Limon', 'Monroe', 'Nebraska'];
-    for (var i = -150; i < 150; i += blocksize) {
-        for (var j = -150; j < 150; j += blocksize) {
+    for (var i = -161; i < 161; i += blocksize * 2) {
+        for (var j = -161; j < 161; j += blocksize * 2) {
             if (Math.abs(i + j) > 200 ||
                (Math.abs(i - j) > 200))
                 continue; // Make it circular
@@ -50,7 +50,7 @@ function generateTransit() {
             var lines = new THREE.LineSegments(geom, greenmaterial);
             lines.position.x = i;
             lines.position.z = j;
-            lines.name = streetNumbers[(i + 150) / blocksize] + ' and ' +  streetNames[(j + 150) / blocksize];
+            lines.name = streetNumbers[(i + 161) / (2 * blocksize)] + ' and ' +  streetNames[(j + 161) / (2 * blocksize)];
             streets.push(lines);
         }
     }

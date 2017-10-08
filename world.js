@@ -74,10 +74,6 @@ function changeBuilding(building) {
     building.position.y = 0;
     building.position.z = 0;
     building.rotation.y = 0;
-    building.street.position.x = 0;
-    building.street.position.y = 0;
-    building.street.position.z = 0;
-    building.street.rotation.y = 0;
     building.elec.position.x = 0;
     building.elec.position.y = 0;
     building.elec.position.z = 0;
@@ -86,7 +82,6 @@ function changeBuilding(building) {
     buildingWorld.camera.position.y = 140;
     buildingWorld.camera.updateProjectionMatrix();
     buildingWorld.scene.add(building);
-    buildingWorld.scene.add(building.street);
     buildingWorld.scene.add(building.elec);
     if (!buildingWorld.animating) {
         buildingWorld.animating = true;
@@ -109,12 +104,10 @@ function animate(world, cityMode) {
             requestAnimationFrame(function(){animate(world, cityMode)});
             if (world.camera.rotation.x != Math.PI / 2) { // Only spin buildings in iso view
                 currentbuilding.rotation.y += 0.01;
-                currentbuilding.street.rotation.y += 0.01;
                 currentelectrical.rotation.y += 0.01;
             }
             else {
                 currentbuilding.rotation.y = 0;
-                currentbuilding.street.rotation.y = 0;
                 currentelectrical.rotation.y = 0;
             }
         }

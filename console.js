@@ -123,8 +123,6 @@ function navCmd(args) {
                 var newBuilding = currentsector.bldg[i].clone();
                 newBuilding.cityRef = currentsector.bldg[i];
                 newBuilding.elec = currentsector.bldg[i].elec.clone();
-                newBuilding.street = currentsector.tran[i].clone();
-                newBuilding.realstreet = currentsector.tran[i];
                 changeBuilding(newBuilding);
                 print('Selected building is now "' + i + ': ' + currentbuilding.name + '" in sector "' + currentsector.name + '"');
             }
@@ -235,27 +233,11 @@ function transitCmd(args) {
                 {
                     street.material = greenmaterial;
                     print('Turned on traffic signals at ' + street.name);
-                    if (currentbuilding != null) {
-                        var newBuilding = currentbuilding.cityRef.clone();
-                        newBuilding.cityRef = currentbuilding.cityRef;
-                        newBuilding.elec = currentbuilding.elec;
-                        newBuilding.realstreet = currentbuilding.realstreet;
-                        newBuilding.street = currentbuilding.realstreet.clone();
-                        changeBuilding(newBuilding);
-                    }
                 }
                 else if (args[1] === 'off')
                 {
                     street.material = redmaterial;
                     print('Turned off traffic signals at ' + street.name);
-                    if (currentbuilding != null) {
-                        var newBuilding = currentbuilding.cityRef.clone();
-                        newBuilding.cityRef = currentbuilding.cityRef;
-                        newBuilding.elec = currentbuilding.elec;
-                        newBuilding.realstreet = currentbuilding.realstreet;
-                        newBuilding.street = currentbuilding.realstreet.clone();
-                        changeBuilding(newBuilding);
-                    }
                 }
             }
         }
