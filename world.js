@@ -50,7 +50,6 @@ function changeSector(sector) {
     buildings.forEach(function(b){
         if (b != null) {
             cityWorld.scene.add(b)
-            //cityWorld.scene.add(b.elec);
         }
     });
     var streets = sector.tran;
@@ -62,32 +61,31 @@ function changeSector(sector) {
     }
 }
 
-function changeBuilding(building, road, elec) {
+function changeBuilding(building) {
     clearScene(buildingWorld.scene);
     currentbuilding = building;
-    currentstreet = road;
-    currentelectrical = elec;
     if (building == null) {
         buildingWorld.animating = false;
         return;
     }
+    currentelectrical = building.elec;
     building.position.x = 0;
     building.position.y = 0;
     building.position.z = 0;
     building.rotation.y = 0;
-    road.position.x = 0;
-    road.position.y = 0;
-    road.position.z = 0;
-    road.rotation.y = 0;
-    elec.position.x = 0;
-    elec.position.y = 0;
-    elec.position.z = 0;
-    elec.rotation.y = 0;
+    building.street.position.x = 0;
+    building.street.position.y = 0;
+    building.street.position.z = 0;
+    building.street.rotation.y = 0;
+    building.elec.position.x = 0;
+    building.elec.position.y = 0;
+    building.elec.position.z = 0;
+    building.elec.rotation.y = 0;
     buildingWorld.camera.zoom = 2;
     buildingWorld.camera.updateProjectionMatrix();
     buildingWorld.scene.add(building);
-    buildingWorld.scene.add(road);
-    buildingWorld.scene.add(elec);
+    buildingWorld.scene.add(building.street);
+    buildingWorld.scene.add(building.elec);
     if (!buildingWorld.animating) {
         buildingWorld.animating = true;
         animate(buildingWorld, false);
@@ -112,12 +110,12 @@ function animate(world, cityMode) {
             requestAnimationFrame(function(){animate(world, cityMode)});
             if (world.camera.rotation.x != Math.PI / 2) { // Only spin buildings in iso view
                 currentbuilding.rotation.y += 0.01;
-                currentstreet.rotation.y += 0.01;
+                currentbuilding.street.rotation.y += 0.01;
                 currentelectrical.rotation.y += 0.01;
             }
             else {
                 currentbuilding.rotation.y = 0;
-                currentstreet.rotation.y = 0;
+                currentbuilding.street.rotation.y = 0;
                 currentelectrical.rotation.y = 0;
             }
         }

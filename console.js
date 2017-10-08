@@ -19,7 +19,7 @@ document.body.onclick = function() {
 }
 
 function printWelcome() {
-    print('CityOS 1.0');
+    print('CityOS 1.0 minkcv');
     print('Type "help" for a list of commands');
 }
 printWelcome();
@@ -38,6 +38,14 @@ function parseCommand(cmd) {
         sysCmd(tokens);
     else if (tokens[0] === 'v')
         viewCmd(tokens);
+    else if (tokens[0] === 't')
+        transitCmd(tokens);
+    else if (tokens[0] === 'm')
+        mechanicalCmd(tokens);
+    else if (tokens[0] === 'e')
+        electricalCmd(tokens);
+    else if (tokens[0] === 'p')
+        plumbingCmd(tokens);
     else
         printUnknownCmd(tokens[0]);
 
@@ -114,6 +122,8 @@ function navCmd(args) {
             else {
                 var newBuilding = currentsector.bldg[i].clone();
                 newBuilding.cityRef = currentsector.bldg[i];
+                newBuilding.elec = currentsector.bldg[i].elec.clone();
+                newBuilding.street = currentsector.tran[i].clone();
                 changeBuilding(newBuilding, currentsector.tran[i].clone(), currentsector.bldg[i].elec.clone());
                 print('Selected building is now "' + i + ': ' + currentbuilding.name + '" in sector "' + currentsector.name + '"');
             }
@@ -174,6 +184,45 @@ function viewCmd(args) {
     }
 }
 
+function transitCmd(args)
+{
+    if (args.length < 2)
+        printHelp(['help', 't']);
+    else if (currentsector == null)
+        print('No sector selected');
+    else {
+        if (args[1] === 's') {
+            if (args.length < 3) {
+                print('Streets in sector "' + currentsector.name + '"');
+                for (var i = 0; i < currentsector.tran.length; i += 2)
+                {
+                    var msg = ' ';
+                    for (var j = i; j < i + 2; j++) {
+                        if (j < 10)
+                            msg += ' ';
+                        if (j < 100)
+                            msg += ' ';
+                        if (j < currentsector.tran.length)
+                            msg += j + ': ' + currentsector.tran[j].name;
+                        for (var w = msg.length; w < 40; w++)
+                            msg += ' ';
+                    }
+                    print(msg);
+                }
+            }
+            else {
+                var i = parseInt(args[2]);
+                if (isNaN(i) || i >= currentsector.tran.length)
+                    print('"' + args[2] + '" is not a known street in sector "' + currentsector.name + '"');
+                else {
+                    currentstreet = currentsector.tran[i];
+                    print('Selected street is now "' + i + ': ' + currentstreet.name + '" in sector "' + currentsector.name + '"');
+                }
+            }
+        }
+    }
+}
+
 function printHelp(args) {
     if (args.length < 2 || args[1] === 'help') {
         print('Available Commands:')
@@ -187,7 +236,7 @@ function printHelp(args) {
         print('  t - Control Transit Systems');
         print('  v - Control 3D Views');
     }
-    else if (args[1] == 'nav') {
+    else if (args[1] === 'nav') {
         print('nav - options:');
         print('  s - List available sectors');
         print('  s [sector name] - Navigate to a different sector');
@@ -195,22 +244,29 @@ function printHelp(args) {
         print('  b - List buildings in the current sector');
         print('  b [building id] - Select a building in the current sector');
     }
-    else if (args[1] == 'sys') {
+    else if (args[1] === 'sys') {
         print('sys - options:');
         print('  users - List system users');
         print('  whoami - List current user');
         print('  clear - Clear the console');
     }
-    else if (args[1] == 'm') {
+    else if (args[1] === 't') {
+        print('t - options:');
+        print('  s - List streets');
+        print('  s [street id] - select a street');
+        print('  off - Turn traffic signals off');
+        print('  on - Turn traffic signals on');
+    }
+    else if (args[1] === 'm') {
         print('m - options:');
     }
-    else if (args[1] == 'e') {
+    else if (args[1] === 'e') {
         print('e - options:');
     }
-    else if (args[1] == 'p') {
+    else if (args[1] === 'p') {
         print('p - options:');
     }
-    else if (args[1] == 'v') {
+    else if (args[1] === 'v') {
         print('v - options:');
         print('  s [modifier] - Do modifier on sector view');
         print('  b [modifier] - Do modifier on building view');
