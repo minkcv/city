@@ -185,14 +185,13 @@ function viewCmd(args) {
     }
 }
 
-function transitCmd(args)
-{
+function transitCmd(args) {
     if (args.length < 2)
         printHelp(['help', 't']);
     else if (currentsector == null)
         print('No sector selected');
     else {
-        if (args[1] === 's') {
+        if (args[1] === 'list') {
             if (args.length < 3) {
                 print('Streets in sector "' + currentsector.name + '"');
                 for (var i = 0; i < currentsector.tran.length; i += 2)
@@ -217,44 +216,53 @@ function transitCmd(args)
                 }
             }
             else {
-                var i = parseInt(args[2]);
-                if (isNaN(i) || i >= currentsector.tran.length)
-                    print('"' + args[2] + '" is not a known street in sector "' + currentsector.name + '"');
-                else {
-                    currentstreet = currentsector.tran[i];
-                    print('Selected street is now "' + i + ': ' + currentstreet.name + '" in sector "' + currentsector.name + '"');
-                }
             }
         }
         else {
-            if (currentstreet == null)
-                print('No street selected');
-            else if (args[1] === 'on')
-            {
-                currentstreet.material = greenmaterial;
-                if (currentbuilding != null) {
-                    var newBuilding = currentbuilding.cityRef.clone();
-                    newBuilding.cityRef = currentbuilding.cityRef;
-                    newBuilding.elec = currentbuilding.elec;
-                    newBuilding.realstreet = currentbuilding.realstreet;
-                    newBuilding.street = currentbuilding.realstreet.clone();
-                    changeBuilding(newBuilding);
+            if (args.length < 3 || (args[1] !== 'on' && args[1] !== 'off'))
+                printHelp(['help', 't']);
+            else {
+                var i = parseInt(args[2]);
+                var street = null;
+                if (isNaN(i) || i >= currentsector.tran.length) {
+                    print('"' + args[2] + '" is not a known street in sector "' + currentsector.name + '"');
+                    return;
                 }
-            }
-            else if (args[1] === 'off')
-            {
-                currentstreet.material = redmaterial;
-                if (currentbuilding != null) {
-                    var newBuilding = currentbuilding.cityRef.clone();
-                    newBuilding.cityRef = currentbuilding.cityRef;
-                    newBuilding.elec = currentbuilding.elec;
-                    newBuilding.realstreet = currentbuilding.realstreet;
-                    newBuilding.street = currentbuilding.realstreet.clone();
-                    changeBuilding(newBuilding);
+                else
+                    street = currentsector.tran[i];
+
+                if (args[1] === 'on')
+                {
+                    street.material = greenmaterial;
+                    if (currentbuilding != null) {
+                        var newBuilding = currentbuilding.cityRef.clone();
+                        newBuilding.cityRef = currentbuilding.cityRef;
+                        newBuilding.elec = currentbuilding.elec;
+                        newBuilding.realstreet = currentbuilding.realstreet;
+                        newBuilding.street = currentbuilding.realstreet.clone();
+                        changeBuilding(newBuilding);
+                    }
+                }
+                else if (args[1] === 'off')
+                {
+                    street.material = redmaterial;
+                    if (currentbuilding != null) {
+                        var newBuilding = currentbuilding.cityRef.clone();
+                        newBuilding.cityRef = currentbuilding.cityRef;
+                        newBuilding.elec = currentbuilding.elec;
+                        newBuilding.realstreet = currentbuilding.realstreet;
+                        newBuilding.street = currentbuilding.realstreet.clone();
+                        changeBuilding(newBuilding);
+                    }
                 }
             }
         }
     }
+}
+
+function mechanicalCmd(args) {
+    if (args.length < 2)
+        printHelp(['help', 'm']);
 }
 
 function printHelp(args) {
@@ -286,13 +294,13 @@ function printHelp(args) {
     }
     else if (args[1] === 't') {
         print('t - options:');
-        print('  s - List streets');
-        print('  s [street id] - select a street');
-        print('  off - Turn traffic signals off');
-        print('  on - Turn traffic signals on');
+        print('  list - List streets in current sector');
+        print('  off [street id] - Turn traffic signals off for a street');
+        print('  on [street id] - Turn traffic signals on for a street');
     }
     else if (args[1] === 'm') {
         print('m - options:');
+        print('  list - List mechanical systems of current building');
     }
     else if (args[1] === 'e') {
         print('e - options:');

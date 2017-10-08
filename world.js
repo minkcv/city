@@ -1,7 +1,6 @@
 var origin = new THREE.Vector3();
 var currentsector = null;
 var currentbuilding = null;
-var currentstreet = null;
 var currentelectrical = null;
 
 function createWorld(divName) {
