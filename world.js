@@ -18,11 +18,13 @@ function createWorld(divName) {
     return {scene, camera, renderer};
 }
 
-function isoView(camera) {
+function isoView(camera, buildingMode) {
     camera.rotation.x = -0.5;
     // Move viewing volume back
     camera.position.z = 200;
     camera.position.y = 130;
+    if (buildingMode)
+        camera.position.y = 140;
     camera.updateProjectionMatrix();
 }
 
@@ -81,6 +83,7 @@ function changeBuilding(building) {
     building.elec.position.z = 0;
     building.elec.rotation.y = 0;
     buildingWorld.camera.zoom = 2;
+    buildingWorld.camera.position.y = 140;
     buildingWorld.camera.updateProjectionMatrix();
     buildingWorld.scene.add(building);
     buildingWorld.scene.add(building.street);

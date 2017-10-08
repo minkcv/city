@@ -1,6 +1,7 @@
 var greenmaterial = new THREE.LineBasicMaterial({color: 0x00ff00});
 var redmaterial = new THREE.LineBasicMaterial({color: 0xff0000});
-var yellowMaterial = new THREE.LineBasicMaterial({color: 0xffff00});
+var yellowmaterial = new THREE.LineBasicMaterial({color: 0xffff00});
+var bluematerial = new THREE.LineBasicMaterial({color: 0x0000ff});
 var blocksize = 22;
 
 function rand(max) {
@@ -24,11 +25,11 @@ function generateName(height) {
         'Prison', 'Water Treatment Plant', 'State Office', 'Bus Station'
     ];
     var smallnames = [
-        'Mark\'s', 'Neighborhood', 'Annie\'s', 'Green', 'USA', 'TJ\'s', 
+        'Mark\'s', 'Neighborhood', 'Annie\'s', 'Green', 'USA', 'TJ\'s', 'Artisanal', 'Organic'
     ];
     var smalltypes = [
         'Department Store', 'Dental', 'Deli', 'Video Rental', 'Coffee Shop', 'Cafe', 'Grocery',
-        'Skate Shop', 'Games', 'Diner', 'Ice Cream'
+        'Skate Shop', 'Games', 'Diner', 'Ice Cream', 'Burger Bar'
     ];
     var name = '';
     if (height > 50) {
@@ -114,7 +115,7 @@ function generateElectrical(x, z, wi, de, he) {
 
         points.forEach(function(p){geom.vertices.push(p)});
     }
-    var lines = new THREE.LineSegments(geom, yellowMaterial);
+    var lines = new THREE.LineSegments(geom, yellowmaterial);
     lines.position.x = x;
     lines.position.z = z;
     return lines;
@@ -128,15 +129,14 @@ function generateBuildings() {
                (Math.abs(i - j) > 200))
                 continue; // Make it circular
 
-            if (Math.random() * 50 < 4) // Leave some gaps
-            {
+            if (Math.random() * 50 < 4) { // Leave some gaps
                 buildings.push(null);
                 continue;
             }
 
             var r = Math.random() * 8 + 10;
-            var x = Math.random() * 5 + i;
-            var z = Math.random() * 5 + j;
+            var x = Math.random() * 6 + i - 3;
+            var z = Math.random() * 6 + j - 3;
             var xz = new THREE.Vector3(x, 0, z);
             var h = Math.abs(Math.random() * 50 + 40 - xz.distanceTo(origin) / 2);
             if (h < 5)

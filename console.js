@@ -178,7 +178,7 @@ function viewCmd(args) {
             topView(camera);
         }
         else if (args[2] === 'iso') {
-            isoView(camera);
+            isoView(camera, args[1] === 'b');
         }
         else 
             printUnknownOption('v', args[2]);
@@ -234,6 +234,7 @@ function transitCmd(args) {
                 if (args[1] === 'on')
                 {
                     street.material = greenmaterial;
+                    print('Turned on traffic signals at ' + street.name);
                     if (currentbuilding != null) {
                         var newBuilding = currentbuilding.cityRef.clone();
                         newBuilding.cityRef = currentbuilding.cityRef;
@@ -246,6 +247,7 @@ function transitCmd(args) {
                 else if (args[1] === 'off')
                 {
                     street.material = redmaterial;
+                    print('Turned off traffic signals at ' + street.name);
                     if (currentbuilding != null) {
                         var newBuilding = currentbuilding.cityRef.clone();
                         newBuilding.cityRef = currentbuilding.cityRef;
