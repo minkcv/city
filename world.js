@@ -91,9 +91,6 @@ function changeBuilding(building) {
     }
 }
 
-//var axis = new THREE.AxisHelper(15);
-//scene.add(axis);
-
 function animate(world, cityMode) {
     if (cityMode) {
         if (currentsector != null) {

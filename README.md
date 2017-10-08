@@ -1,7 +1,5 @@
-# The City of Things
+# City Haverk
 
 [minkcv.github.io/city](https://minkcv.github.io/city)
 
-A simulation game about the internet of things.
-
-Made with THREE.js
+Hackertyper on steroids.
