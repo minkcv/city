@@ -22,7 +22,7 @@ function generateName(height) {
     ];
     var mediumtypes = [
         'High School', 'Library', 'Post Office', 'Middle School', 'Community College',
-        'Prison', 'Water Treatment Plant', 'State Office', 'Bus Station'
+        'Prison', 'Water Treatment Plant', 'State Office', 'Bus Station', 'Apartments'
     ];
     var smallnames = [
         'Mark\'s', 'Neighborhood', 'Annie\'s', 'Green', 'USA', 'TJ\'s', 'Artisanal', 'Organic'
