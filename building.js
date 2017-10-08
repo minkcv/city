@@ -106,11 +106,15 @@ function generateElectrical(x, z, wi, de, he) {
             new THREE.Vector3(0, i, -de + margin),
 
             new THREE.Vector3(wi - margin, i, -de + margin),
-            new THREE.Vector3(-wi + margin, i, -de + margin)
+            new THREE.Vector3(-wi + margin, i, -de + margin),
+
+            // Level connector
+            new THREE.Vector3(-wi + margin, i, 0),
+            new THREE.Vector3(-wi + margin, i - level, 0),
         ];
-        if (i + level < he) {
-            points.push(new THREE.Vector3(-wi + margin, i, 0));
-            points.push(new THREE.Vector3(-wi + margin, i + level, 0));
+        if (i - level < 0) {
+            points.push(new THREE.Vector3(-wi + margin, i - level, 0));
+            points.push(new THREE.Vector3(-wi + margin, i - level, -de));
         }
 
         points.forEach(function(p){geom.vertices.push(p)});
