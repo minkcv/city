@@ -119,8 +119,9 @@ function navCmd(args) {
             else {
                 var newBuilding = currentsector.bldg[i].clone();
                 newBuilding.cityRef = currentsector.bldg[i];
-                newBuilding.elec = currentsector.bldg[i].elec.clone();
+                newBuilding.elec = currentsector.bldg[i].elec;
                 newBuilding.mech = currentsector.bldg[i].mech;
+                newBuilding.plmb = currentsector.bldg[i].plmb;
                 changeBuilding(newBuilding);
                 print('Selected building is now "' + i + ': ' + currentbuilding.name + '" in sector "' + currentsector.name + '"');
             }
@@ -267,6 +268,38 @@ function mechanicalCmd(args) {
     }
 }
 
+function electricalCmd(args) {
+    if (args.length < 2)
+        printHelp(['help', 'e']);
+    else if (currentbuilding == null)
+        print('No selected building');
+    else {
+        if (args[1] === 'on' || args[1] === 'off') {
+            if (args[1] === 'on')
+                currentbuilding.elec.material = yellowmaterial;
+            else
+                currentbuilding.elec.material = redmaterial;
+            print('Electricity for "' + currentbuilding.name + '" is now ' + args[1]);
+        }
+    }
+}
+
+function plumbingCmd(args) {
+    if (args.length < 2)
+        printHelp(['help', 'p']);
+    else if (currentbuilding == null)
+        print('No selected building');
+    else {
+        if (args[1] === 'on' || args[1] === 'off') {
+            if (args[1] === 'on')
+                currentbuilding.plmb.material = bluematerial;
+            else
+                currentbuilding.plmb.material = redmaterial;
+            print('Plumging systems for "' + currentbuilding.name + '" are now ' + args[1]);
+        }
+    }
+}
+
 function printHelp(args) {
     if (args.length < 2 || args[1] === 'help') {
         print('Available Commands:')
@@ -303,12 +336,18 @@ function printHelp(args) {
     else if (args[1] === 'm') {
         print('m - options:');
         print('  list - List mechanical systems of current building');
+        print('  on - Enable mechanical systems of the current building');
+        print('  off - Disable mechanical systems of the current building');
     }
     else if (args[1] === 'e') {
         print('e - options:');
+        print('  on - Enable electricity of the current building');
+        print('  off - Disable electricity of the current building');
     }
     else if (args[1] === 'p') {
         print('p - options:');
+        print('  on - Enable plumbing systems of the current building');
+        print('  off - Disable plumbing systems of the current building');
     }
     else if (args[1] === 'v') {
         print('v - options:');

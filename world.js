@@ -1,7 +1,6 @@
 var origin = new THREE.Vector3();
 var currentsector = null;
 var currentbuilding = null;
-var currentelectrical = null;
 
 function createWorld(divName) {
     var threediv = document.getElementById(divName);
@@ -78,7 +77,6 @@ function changeBuilding(building) {
         buildingWorld.animating = false;
         return;
     }
-    currentelectrical = building.elec;
     building.position.x = 0;
     building.position.y = 0;
     building.position.z = 0;
@@ -87,11 +85,17 @@ function changeBuilding(building) {
     building.elec.position.y = 0;
     building.elec.position.z = 0;
     building.elec.rotation.y = 0;
+    building.plmb.position.x = 0;
+    building.plmb.position.y = 0;
+    building.plmb.position.z = 0;
+    building.plmb.rotation.y = 0;
     buildingWorld.camera.zoom = 2;
     buildingWorld.camera.position.y = 140;
     buildingWorld.camera.updateProjectionMatrix();
     buildingWorld.scene.add(building);
     buildingWorld.scene.add(building.elec);
+    buildingWorld.scene.add(building.plmb);
+    buildingWorld.scene.rotation.y = cityWorld.scene.rotation.y; // keep rotations in sync
     if (!buildingWorld.animating) {
         buildingWorld.animating = true;
         animate(buildingWorld, false);
@@ -113,11 +117,13 @@ function animate(world, cityMode) {
             requestAnimationFrame(function(){animate(world, cityMode)});
             if (world.camera.rotation.x != Math.PI / 2) { // Only spin buildings in iso view
                 currentbuilding.rotation.y += 0.01;
-                currentelectrical.rotation.y += 0.01;
+                currentbuilding.elec.rotation.y += 0.01;
+                currentbuilding.plmb.rotation.y += 0.01;
             }
             else {
                 currentbuilding.rotation.y = 0;
-                currentelectrical.rotation.y = 0;
+                currentbuilding.elec.rotation.y = 0;
+                currentbuilding.plmb.rotation.y = 0;
             }
         }
     }

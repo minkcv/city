@@ -82,6 +82,7 @@ function generateBuilding(x, z, wi, de, he) {
     buildingModel.name = generateName(he);
     buildingModel.elec = generateElectrical(x, z, wi, de, he);
     buildingModel.mech = generateMechanical(he);
+    buildingModel.plmb = generatePlumbing(x, z, wi, de, he);
     return buildingModel;
 }
 
@@ -89,7 +90,7 @@ function generateElectrical(x, z, wi, de, he) {
     var geom = new THREE.Geometry();
     var margin = 2;
     var level = 10;
-    for (var i = 0; i < he; i += level) {
+    for (var i = 2; i < he - 5; i += level) {
         var points = [
             new THREE.Vector3(-wi + margin, i, -de + margin),
             new THREE.Vector3(-wi + margin, i, de - margin),
@@ -128,13 +129,58 @@ function generateElectrical(x, z, wi, de, he) {
 
 function generateMechanical(height) {
     var mech = [];
-    if (height > 40)
-        mech.push(['Elevator', 'on']);
 
     mech.push(['Heating', 'on']);
     mech.push(['Ventilation', 'on']);
-    mech.push(['Air Conditioning', 'on']);
+    mech.push(['Air Conditioning', 'off']);
+    if (Math.random() > 0.5) { // Turn heating off, ac on
+        mech[0][1] = 'off';
+        mech[2][1] = 'on';
+    }
+    if (height > 40)
+        mech.push(['Elevator', 'on']);
     return mech;
+}
+
+function generatePlumbing(x, z, wi, de, he) {
+    var geom = new THREE.Geometry();
+    var margin = 2;
+    var level = 10;
+    for (var i = 0; i < he - 3; i += level) {
+        var points = [
+            new THREE.Vector3(-wi + margin, i, -de + margin),
+            new THREE.Vector3(-wi + margin, i, de - margin),
+
+            new THREE.Vector3(-wi + margin, i, de - margin),
+            new THREE.Vector3(wi - margin, i, de - margin),
+
+            //new THREE.Vector3(wi - margin, i, de - margin),
+            //new THREE.Vector3(wi - margin, i, -de + margin),
+
+            new THREE.Vector3(-wi + margin, i, 0),
+            new THREE.Vector3(wi - margin, i, 0),
+
+            //new THREE.Vector3(0, i, de - margin),
+            //new THREE.Vector3(0, i, -de + margin),
+
+            new THREE.Vector3(wi - margin, i, -de + margin),
+            new THREE.Vector3(-wi + margin, i, -de + margin),
+
+            // Level connector
+            new THREE.Vector3(-wi + margin, i, margin),
+            new THREE.Vector3(-wi + margin, i - level, margin),
+        ];
+        if (i - level < 0) {
+            points.push(new THREE.Vector3(-wi + margin, i - level, margin));
+            points.push(new THREE.Vector3(-wi + margin, i - level, -de));
+        }
+
+        points.forEach(function(p){geom.vertices.push(p)});
+    }
+    var lines = new THREE.LineSegments(geom, bluematerial);
+    lines.position.x = x;
+    lines.position.z = z;
+    return lines;
 }
 
 function generateBuildings() {
@@ -155,8 +201,8 @@ function generateBuildings() {
             var z = Math.random() * 6 + j - 3;
             var xz = new THREE.Vector3(x, 0, z);
             var h = Math.abs(Math.random() * 50 + 40 - xz.distanceTo(origin) / 2);
-            if (h < 5)
-                h = 5;
+            if (h < 10)
+                h = 10;
             buildings.push(generateBuilding(x, z, r, r, h));
         }
     }
