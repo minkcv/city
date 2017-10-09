@@ -9,8 +9,8 @@ function generateTransit() {
     var streetNames = ['Albion', 'Birch', 'Chestnut', 'Delaware', 'Eleanor', 'France', 'Georgia', 'High', 'Illinois', 'Josephine', 'Kearny', 'Limon', 'Monroe', 'Nebraska'];
     for (var i = -161; i < 161; i += blocksize * 2) {
         for (var j = -161; j < 161; j += blocksize * 2) {
-            if (Math.abs(i + j) > 200 ||
-               (Math.abs(i - j) > 200))
+            if (Math.abs(i + j) > 240 ||
+               (Math.abs(i - j) > 240))
                 continue; // Make it circular
 
             var points = [

@@ -25,7 +25,7 @@ function generateName(height) {
         'Prison', 'Water Treatment Plant', 'State Office', 'Bus Station', 'Apartments'
     ];
     var smallnames = [
-        'Mark\'s', 'Neighborhood', 'Annie\'s', 'Green', 'USA', 'TJ\'s', 'Artisanal', 'Organic'
+        'Mark\'s', 'Neighborhood', 'Annie\'s', 'Green', 'USA', 'TJ\'s', 'Artisanal', 'All Natural'
     ];
     var smalltypes = [
         'Department Store', 'Dental', 'Deli', 'Video Rental', 'Coffee Shop', 'Cafe', 'Grocery',
@@ -81,6 +81,7 @@ function generateBuilding(x, z, wi, de, he) {
     buildingModel.position.z = z;
     buildingModel.name = generateName(he);
     buildingModel.elec = generateElectrical(x, z, wi, de, he);
+    buildingModel.mech = generateMechanical(he);
     return buildingModel;
 }
 
@@ -125,6 +126,17 @@ function generateElectrical(x, z, wi, de, he) {
     return lines;
 }
 
+function generateMechanical(height) {
+    var mech = [];
+    if (height > 40)
+        mech.push(['Elevator', 'on']);
+
+    mech.push(['Heating', 'on']);
+    mech.push(['Ventilation', 'on']);
+    mech.push(['Air Conditioning', 'on']);
+    return mech;
+}
+
 function generateBuildings() {
     var buildings = [];
     for (var i = -150; i < 150; i += blocksize) {
@@ -134,7 +146,7 @@ function generateBuildings() {
                 continue; // Make it circular
 
             if (Math.random() * 50 < 4) { // Leave some gaps
-                buildings.push(null);
+                //buildings.push(null);
                 continue;
             }
 

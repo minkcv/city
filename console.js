@@ -103,10 +103,7 @@ function navCmd(args) {
                     if (j < 100)
                         msg += ' ';
                     if (j < currentsector.bldg.length)
-                        if (currentsector.bldg[j] != null)
-                            msg += j + ': ' + currentsector.bldg[j].name;
-                        else
-                            msg += j + ': Vacant';
+                        msg += j + ': ' + currentsector.bldg[j].name;
                     for (var w = msg.length; w < 40; w++)
                         msg += ' ';
                 }
@@ -123,6 +120,7 @@ function navCmd(args) {
                 var newBuilding = currentsector.bldg[i].clone();
                 newBuilding.cityRef = currentsector.bldg[i];
                 newBuilding.elec = currentsector.bldg[i].elec.clone();
+                newBuilding.mech = currentsector.bldg[i].mech;
                 changeBuilding(newBuilding);
                 print('Selected building is now "' + i + ': ' + currentbuilding.name + '" in sector "' + currentsector.name + '"');
             }
@@ -247,6 +245,26 @@ function transitCmd(args) {
 function mechanicalCmd(args) {
     if (args.length < 2)
         printHelp(['help', 'm']);
+    else if (currentbuilding == null)
+        print('No selected building');
+    else {
+        if (args[1] === 'list') {
+            for (var i = 0; i < currentbuilding.mech.length; i++) {
+                print(i + ': ' + currentbuilding.mech[i][0] + ' - ' + currentbuilding.mech[i][1]);
+            }
+        }
+        else if (args[1] === 'on' || args[1] === 'off') {
+            var i = parseInt(args[2]);
+            if (isNaN(i) || i >= currentbuilding.mech.length) {
+                print('"' + args[2] + '" is not a mechanical system in sector "' + currentbuilding.name + '"');
+                return;
+            }
+            else {
+                currentbuilding.mech[i][1] = args[1];
+                print(currentbuilding.mech[i][0] + ' is now ' + args[1]);
+            }
+        }
+    }
 }
 
 function printHelp(args) {

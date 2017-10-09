@@ -42,23 +42,32 @@ function clearScene(scene) {
     }
 }
 
+
 function changeSector(sector) {
     if (sector == null)
         return;
     clearScene(cityWorld.scene);
     var buildings = sector.bldg;
     buildings.forEach(function(b){ if (b != null) b.rotation.y = 0;});
-    buildings.forEach(function(b){
-        if (b != null) {
-            cityWorld.scene.add(b)
-        }
-    });
-    var streets = sector.tran;
-    streets.forEach(function(s){cityWorld.scene.add(s)});
     currentsector = sector;
     if (!cityWorld.animating) {
         cityWorld.animating = true;
         animate(cityWorld, true);
+    }
+    for (var i = 0; i < currentsector.tran.length; i++) {
+        setTimeout(function(i) {
+            return function() {
+                cityWorld.scene.add(currentsector.tran[i]);
+            }
+        }(i), i * 100);
+    }
+    for (var i = 0; i < currentsector.bldg.length; i++) {
+        setTimeout(function(i) {
+            return function() {
+                if (currentsector.bldg[i] != null)
+                    cityWorld.scene.add(currentsector.bldg[i]);
+            }
+        }(i), i * 50);
     }
 }
 
