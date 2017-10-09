@@ -4,6 +4,7 @@ var stdout = document.getElementById('stdout');
 var stdin = document.getElementById('stdin');
 var consolepane = document.getElementById('console');
 stdin.focus();
+changeSector(getSector('alpha'));
 
 stdin.onkeypress = function(event) {
     var key = event.keyCode || event.which;
@@ -154,8 +155,13 @@ function viewCmd(args) {
         printHelp(['help', 'v']);
     else {
         var camera = null;
-        if (args[1] === 'b')
+        if (args[1] === 'b') {
+            if (currentbuilding == null) {
+                print('No building selected');
+                return;
+            }
             camera = buildingWorld.camera;
+        }
         else if (args[1] === 's')
             camera = cityWorld.camera;
         else {
