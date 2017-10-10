@@ -248,7 +248,7 @@ function mechanicalCmd(args) {
                 print(i + ': ' + currentbuilding.mech[i][0] + ' - ' + currentbuilding.mech[i][1]);
             }
         }
-        else if (args[1] === 'on' || args[1] === 'off') {
+        else if (args.length > 3 && (args[1] === 'on' || args[1] === 'off')) {
             var i = parseInt(args[2]);
             if (isNaN(i) || i >= currentbuilding.mech.length) {
                 print('"' + args[2] + '" is not a mechanical system in sector "' + currentbuilding.name + '"');
@@ -259,6 +259,8 @@ function mechanicalCmd(args) {
                 print(currentbuilding.mech[i][0] + ' is now ' + args[1]);
             }
         }
+        else
+        printHelp(['help', 'm']);
     }
 }
 
@@ -329,8 +331,8 @@ function printHelp(args) {
     else if (args[1] === 'm') {
         print('m - options:');
         print('  list - List mechanical systems of current building');
-        print('  on - Enable mechanical systems of the current building');
-        print('  off - Disable mechanical systems of the current building');
+        print('  on [system id] - Enable mechanical system of the current building');
+        print('  off [system id] - Disable mechanical system of the current building');
     }
     else if (args[1] === 'e') {
         print('e - options:');
