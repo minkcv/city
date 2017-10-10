@@ -78,18 +78,6 @@ function navCmd(args) {
             }
         }
     }
-    else if (args[1] === 'info') {
-        var infosector = currentsector;
-        if (args.length > 3)
-            infosector = getSector(args[2]);
-
-        print('Sector "' + infosector.name + '" information:');
-        print(' ' + infosector.desc);
-        print('  Number of buildings: ' + infosector.bldg.length);
-        print(' ' + infosector.mech);
-        print(' ' + infosector.elec);
-        print(' ' + infosector.plmb);
-    }
     else if (args[1] === 'b') {
         if (currentsector == null) {
             print('No sector selected');
@@ -323,7 +311,6 @@ function printHelp(args) {
         print('nav - options:');
         print('  s - List available sectors');
         print('  s [sector name] - Navigate to a different sector');
-        print('  info [sector name] - Print sector info (name optional)');
         print('  b - List buildings in the current sector');
         print('  b [building id] - Select a building in the current sector');
     }
