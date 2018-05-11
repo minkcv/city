@@ -58,7 +58,7 @@ function changeSector(sector) {
             return function() {
                 cityWorld.scene.add(currentsector.tran[i]);
             }
-        }(i), i * 100);
+        }(i), i * 50);
     }
     for (var i = 0; i < currentsector.bldg.length; i++) {
         setTimeout(function(i) {
@@ -66,7 +66,7 @@ function changeSector(sector) {
                 if (currentsector.bldg[i] != null)
                     cityWorld.scene.add(currentsector.bldg[i]);
             }
-        }(i), i * 50);
+        }(i), i * 25);
     }
 }
 

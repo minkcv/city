@@ -20,7 +20,7 @@ document.body.onclick = function() {
 }
 
 function printWelcome() {
-    print('CityOS 1.0 minkcv');
+    print('CityOS 1.1 minkcv');
     print('Type "help" for a list of commands');
 }
 printWelcome();
@@ -47,6 +47,8 @@ function parseCommand(cmd) {
         electricalCmd(tokens);
     else if (tokens[0] === 'p')
         plumbingCmd(tokens);
+    else if (tokens[0] === 'auto')
+        autoType();
     else
         printUnknownCmd(tokens[0]);
 
@@ -272,9 +274,20 @@ function electricalCmd(args) {
     else {
         if (args[1] === 'on' || args[1] === 'off') {
             if (args[1] === 'on')
+            {
                 currentbuilding.elec.material = yellowmaterial;
+                currentbuilding.material = greenmaterial;
+            }
             else
+            {
                 currentbuilding.elec.material = redmaterial;
+                if (currentbuilding.plmb.material == redmaterial)
+                    currentbuilding.material = redmaterial;
+            }
+            currentsector.bldg.forEach((b) => {
+                if (b.name == currentbuilding.name)
+                    b.material = currentbuilding.material;
+            });
             print('Electricity for "' + currentbuilding.name + '" is now ' + args[1]);
         }
     }
@@ -288,9 +301,20 @@ function plumbingCmd(args) {
     else {
         if (args[1] === 'on' || args[1] === 'off') {
             if (args[1] === 'on')
+            {
                 currentbuilding.plmb.material = bluematerial;
+                currentbuilding.material = greenmaterial;
+            }
             else
+            {
                 currentbuilding.plmb.material = redmaterial;
+                if (currentbuilding.elec.material == redmaterial)
+                    currentbuilding.material = redmaterial;
+            }
+            currentsector.bldg.forEach((b) => {
+                if (b.name == currentbuilding.name)
+                    b.material = currentbuilding.material;
+            });
             print('Plumging systems for "' + currentbuilding.name + '" are now ' + args[1]);
         }
     }
@@ -299,6 +323,7 @@ function plumbingCmd(args) {
 function printHelp(args) {
     if (args.length < 2 || args[1] === 'help') {
         print('Available Commands:')
+        print('  auto - Execute a series of commands automatically');
         print('  help - Show this help');
         print('  help [command] - Get help on a specific command');
         print('  nav - Navigate Sectors and Buildings');
@@ -357,6 +382,49 @@ function printHelp(args) {
     else {
         print('No help entry for "' + args[1] + '"');
     }
+}
+
+function autoType() {
+    var commands = [
+        'nav b 100',
+        'v b in',
+        'v b in',
+        'v b in',
+        'v b in',
+        'v b in',
+        'v b in',
+        'nav b',
+        't list'
+    ];
+    var timeout = 10;
+    for (var i = 0; i < commands.length; i++) {
+        var cmd = commands[i];
+        parseProxy(cmd, timeout);
+        timeout += 10;
+    }
+    commands = [];
+    for (var i = 0; i < 20; i++) {
+        var street = Math.random() * 50;
+        commands.push('t off ' + street);
+    }
+    for (var i = 0; i < 50; i++) {
+        var building = Math.random() * 150;
+        commands.push('nav b ' + building);
+        commands.push('m list');
+        commands.push('p off');
+        commands.push('e off');
+    }
+    timeout = 100;
+    for (var i = 0; i < commands.length; i++) {
+        var cmd = commands[i];
+        parseProxy(cmd, timeout);
+        timeout += 100;
+    }
+}
+
+// Proxy function causes these to not share cmd in the for loop above.
+function parseProxy(cmd, timeout) {
+    setTimeout(() => parseCommand(cmd), timeout);
 }
 
 function printUnknownCmd(cmd) {
